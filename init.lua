@@ -2158,6 +2158,7 @@ core.register_node("hades_craftguide2:sign", {
 	paramtype = "light",
 	paramtype2 = "wallmounted",
 	sunlight_propagates = true,
+  use_texture_alpha = "clip",
 	groups = {
 		choppy = 1,
 		attached_node = 1,
