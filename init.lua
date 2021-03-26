@@ -1,4 +1,4 @@
-craftguide = {}
+local craftguide = {}
 
 -- Caches
 local pdata         = {}
@@ -183,7 +183,7 @@ local function outdated(name)
 	"Your Minetest client is outdated.\n" ..
 	"Get the latest version on minetest.net to use the Crafting Guide.")
 
-	return show_formspec(name, "craftguide", fs)
+	return show_formspec(name, "hades_craftguide2", fs)
 end
 
 craftguide.group_stereotypes = {
@@ -1717,7 +1717,7 @@ local function show_fs(player, name)
 	local data = pdata[name]
 	local fs = make_fs(player, data)
 
-	show_formspec(name, "craftguide", fs)
+	show_formspec(name, "hades_craftguide2", fs)
 end
 
 craftguide.register_craft_type("digging", {
@@ -1993,7 +1993,7 @@ on_joinplayer(function(player)
 end)
 
 on_receive_fields(function(player, formname, _f)
-	if formname ~= "craftguide" then
+	if formname ~= "hades_craftguide2" then
 		return false
 	end
 
@@ -2138,7 +2138,7 @@ local function on_use(user)
 	user:hud_set_flags(data.hud_flags)
 end
 
-core.register_craftitem("craftguide:book", {
+core.register_craftitem("hades_craftguide2:book", {
 	description = S"Crafting Guide",
 	inventory_image = PNG.book,
 	wield_image = PNG.book,
@@ -2149,7 +2149,7 @@ core.register_craftitem("craftguide:book", {
 	end
 })
 
-core.register_node("craftguide:sign", {
+core.register_node("hades_craftguide2:sign", {
 	description = S"Crafting Guide Sign",
 	drawtype = "nodebox",
 	tiles = {PNG.sign},
@@ -2182,26 +2182,26 @@ core.register_node("craftguide:sign", {
 })
 
 core.register_craft{
-	output = "craftguide:book",
+	output = "hades_craftguide2:book",
 	type   = "shapeless",
-	recipe = {"default:book"}
+	recipe = {"dye:grey", "dye:black", "dye:red", "dye:yellow", "dye:green", "dye:cyan", "dye:blue", "hades_core:book", "dye:magenta"}
 }
 
 core.register_craft{
 	type = "fuel",
-	recipe = "craftguide:book",
+	recipe = "hades_craftguide2:book",
 	burntime = 3
 }
 
 core.register_craft{
-	output = "craftguide:sign",
+	output = "hades_craftguide2:sign",
 	type   = "shapeless",
-	recipe = {"default:sign_wall_wood"}
+	recipe = {"signs_lib:sign_wall", "hades_craftguide2:book"}
 }
 
 core.register_craft{
 	type = "fuel",
-	recipe = "craftguide:sign",
+	recipe = "hades_craftguide2:sign",
 	burntime = 10
 }
 
@@ -2511,3 +2511,7 @@ register_command("craft", {
 		return true, craftguide.show(name, node_name)
 	end,
 })
+
+-- for integration to Hades Revisited without collision with integrated Hades old version of craftguide.
+hades_craftguide2 = craftguide;
+
