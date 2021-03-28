@@ -83,7 +83,7 @@ local PNG = {
 	search = "craftguide_search.png",
 	prev = "craftguide_next.png^\\[transformFX",
 	next = "craftguide_next.png",
-	arrow = "craftguide_arrow.png",
+	arrow = "hades_craftguide2_arrow.png",
 	trash = "craftguide_trash.png",
 	sort_az = "craftguide_sort.png",
 	sort_za = "craftguide_sort2.png",
@@ -514,7 +514,7 @@ function craftguide.register_craft(def)
 
 		for i = 1, len do
 			while #split(items[i], ",") < width do
-				items[i] = fmt("%s,", items[i])
+        items[i] = items[i] .. ", "
 			end
 		end
 
