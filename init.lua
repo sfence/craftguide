@@ -1454,7 +1454,12 @@ local function get_model_fs(fs, data, def, model_alias)
 				_name = sprintf("%s^[multiply:%s", v.name, v.color)
 			end
 		elseif v.animation then
-			_name = sprintf("%s^[verticalframe:%u:0", v.name, v.animation.aspect_h)
+			if v.animation.type=="vertical_frames" then
+				_name = sprintf("%s^[verticalframe:%u:0", v.name, v.animation.aspect_h)
+			else
+				_name = sprintf("%s^[sheet:%ux%u:0", v.name, v.animation.frames_w, v.animation.frames_h)
+        print(_name)
+			end
 		end
 
 		t[#t + 1] = _name or v.name or v
@@ -1510,12 +1515,14 @@ local function get_header(fs, data)
 	   fmt("label", X, Y2, clr("#7bf", tech_name)), "style_type[label;font=normal;font_size=16]")
 
 	local def = reg_items[data.query_item]
-	local model_alias = craftguide.model_alias[data.query_item]
+  if def then
+		local model_alias = craftguide.model_alias[data.query_item]
 
-	if def.drawtype == "mesh" or model_alias then
-		get_model_fs(fs, data, def, model_alias)
-	else
-		fs(fmt("item_image", data.xoffset + 6.8, data.yoffset + 0.17, 1.1, 1.1, data.query_item))
+		if def.drawtype == "mesh" or model_alias then
+			get_model_fs(fs, data, def, model_alias)
+		else
+			fs(fmt("item_image", data.xoffset + 6.8, data.yoffset + 0.17, 1.1, 1.1, data.query_item))
+		end
 	end
 end
 
@@ -1756,6 +1763,9 @@ local function search(data)
 	for i = 1, #data.items_raw do
 		local item = data.items_raw[i]
 		local def = reg_items[item]
+    if def and (type(def.description)=="table") then
+      minetest.log("error", "Error in item "..item.." definition")
+    end
 		local desc = lower(translate(data.lang_code, def and def.description)) or ""
 		local search_in = sprintf("%s %s", item, desc)
 		local temp, j, to_add = {}, 1
